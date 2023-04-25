@@ -19,6 +19,8 @@ spec:
           image: aksdevopsacr.azurecr.io/custom2aksnginxapp1
           ports:
             - containerPort: 80
+      imagePullSecrets:
+        - name: acrdemo2ss-secret        
 ---
 apiVersion: v1
 kind: Service
