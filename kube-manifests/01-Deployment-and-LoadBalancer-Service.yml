@@ -15,12 +15,13 @@ spec:
         app: app1-nginx
     spec:
       containers:
-        - name: app1-nginx
-          image: saravananmohan241086.azurecr.io/saravananmohanaksbuildandpush:9
+        - name: acrdemo-localdocker
+          image: acrdemo2ss.azurecr.io/app2/acr-app2:v1
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
       imagePullSecrets:
-        - name: acrdemo2ss-secret        
+        - name: acrdemo2ss  
 ---
 apiVersion: v1
 kind: Service
