@@ -1,0 +1,46 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build 
+        steps:
+          - task: ContainerBuild@0
+            inputs:
+              dockerRegistryServiceConnection: 'saravananmohan241086'
+              repository: 'sarava'
+              Dockerfile: 'Dockerfile'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'manifests'
+              publishLocation: 'Container'
+              
+  - stage: Deploy
+    jobs:
+      - job: Deploy 
+        steps:
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: ''
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: KubernetesManifest@1
+            inputs:
+              action: 'deploy'
+              connectionType: 'kubernetesServiceConnection'
+              kubernetesServiceConnection: 'acrspn'
+              namespace: 'default'
+
+
+
